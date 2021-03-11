@@ -1,0 +1,9 @@
+= Simple ToDo App with VueJS and Spring Boot
+
+. Create the Project
++
+[source,shell]
+----
+vue init webpack todo-ui
+----
+
