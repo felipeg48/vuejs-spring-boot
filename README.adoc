@@ -1,6 +1,14 @@
 = Simple ToDo App with VueJS and Spring Boot
 :icons: font
 
+== Requirements
+
+- https://adoptopenjdk.net/installation.html[Java 8^]
+- https://nodejs.org/en/[NodeJS / NPM^]
+- https://cli.vuejs.org/[VueJS CLI^]
+- https://www.docker.com/products/docker-desktop[Docker / Docker Desktop^]
+- https://ibm.biz/BdfjCM[CodeReady Containers^]
+- IDE: https://code.visualstudio.com/download[VS Code^] | https://www.jetbrains.com/[JetBrains^] | https://www.eclipse.org/downloads/[Eclipse^] | https://spring.io/tools[Spring Tools^]
 
 == VueJS UI
 
@@ -75,7 +83,7 @@ npm run dev
 include::todo-ui/Dockerfile[]
 ----
 
-. Build you image, test it and push it to your Registry.
+. [*OPTIONAL*]Build you image, test it and push it to your Registry.
 +
 [source,shell]
 ----
@@ -85,7 +93,8 @@ docker push <your-id>>/todo-ui:v1
 docker tag <image-id> <your-id>>/todo-ui:latest
 docker push <your-id>>/todo-ui:latest
 ----
-
++
+WARNING: This step is *OPTIONAL*, you *DON'T* need it for deploying in OpenShift.
 
 == Spring Boot
 
@@ -169,8 +178,59 @@ docker tag <image-id> <your-id>>/todo:latest
 docker push <your-id>>/todo:latest
 ----
 
-== Deploy to OpenShift
+== Deploy the ToDo App in OpenShift
 
-. Open you account en IBM Cloud: https://ibm.biz/BdfsdZ[^]
-. Go to your cluster.
-. Deploy the `ToDo` app (the backend) with the following:
+. Open you account en RedHat con CodeReady Containers: https://ibm.biz/BdfjCM[^]
++
+image::images/img03.png[]
+. Go to the Developer Sandbox and Launch it.
++
+image::images/img04.png[]
+. Create an account or Login into RedHat Portal
++
+image::images/img05.png[]
++
+Once you login, click the `Start using your sandbox` button.
++
+image::images/img06.png[]
+. Select `DevSandBox`
++
+image::images/img07.png[]
+. It will appear the *Topology* Dashboard. Select from `Git` and paste the `todo` git project.
++
+image::images/img08.png[]
++
+image::images/img09.png[]
++
+You can click the `Routes` link and change the port to `8081`.
++
+TIP: Follow the Instructor for other field's metadata.
+
+. You will present the *Workload* page with your app in the middle. Review the options.
++
+image::images/img10.png
++
+You can click in the `View logs` link in the *Builds* section
++
+image::images/img11.png[]
++
+image::images/img12.png[]
++
+You can also see the logs of the Pods runing.
++
+image::images/img13.png[]
+. Switch to *_Administrator_* mode and fix the `Route` and `Service` if necessary to point to the 8081.
++
+image::images/img14.png[]
++
+image::images/img15.png[]
+. You can access to your `ToDo` app b y clicking into the `Route`
+
+== Deploy the ToDo UI App in OpenShift
+
+
+
+
+== Challenge
+
+- If they apps are not running as it supose to, fix them!
