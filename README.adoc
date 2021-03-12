@@ -170,3 +170,7 @@ docker push <your-id>>/todo:latest
 ----
 
 == Deploy to OpenShift
+
+. Open you account en IBM Cloud: https://ibm.biz/BdfsdZ[^]
+. Go to your cluster.
+. Deploy the `ToDo` app (the backend) with the following:
