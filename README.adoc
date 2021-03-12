@@ -1,9 +1,32 @@
 = Simple ToDo App with VueJS and Spring Boot
+:icons: font
 
-. Create the Project
+
+== VueJS UI
+
+. Create the Project and Insatll Axios
 +
 [source,shell]
 ----
 vue init webpack todo-ui
+cd todo-ui
+npm install axios
 ----
 
+. Add the Bootstrap CSS to the `index.html` file.
++
+[source,html]
+----
+include::todo-ui/index.html[]
+----
+
+
+
+
+== Spring Boot
+
+. Go to https://start.spring.io/[^]
++
+Add the following Dependencies: _Web_, _Data JPA_, _H2_, _Lombok_, _MySQL Driver_
++
+image::images/img01.png[]
