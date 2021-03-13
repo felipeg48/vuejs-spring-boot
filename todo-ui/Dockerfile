@@ -8,6 +8,6 @@ RUN npm run build
 
 # production stage
 FROM bitnami/nginx as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/dist /app
 EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]
