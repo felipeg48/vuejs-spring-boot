@@ -239,33 +239,11 @@ image::images/img17.png[]
 
 == Deploy the ToDo UI App in OpenShift
 
-in this section we are going to use the `oc` or `kubectl` tools. It's necessary to hve both in your *PATH* environment variable.
+. Open you OpenShift Cluster page.
+. Click the *+Add* button.
+. Select the *Dockerfile* square.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-. Create the `k8s-deployment.yaml` file with the following commands
-+
-[source,shell]
-----
-kubectl create deployment todo-ui --image=<your-id>/todo-ui:v1 --dry-run=client -o=yaml > k8s-deployment.yaml
-
-echo --- >> k8s-deployment.yaml
-
-kubectl create service loadbalancer todo-ui --tcp=8080:8080 --dry-run=client -o=yaml >> k8s-deployment.yaml
-----
 
 
 == Challenge
