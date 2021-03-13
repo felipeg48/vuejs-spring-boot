@@ -83,7 +83,7 @@ npm run dev
 include::todo-ui/Dockerfile[]
 ----
 
-. [*OPTIONAL*]Build you image, test it and push it to your Registry.
+. [*OPTIONAL*] Build you image, test it and push it to your Registry.
 +
 [source,shell]
 ----
@@ -167,7 +167,7 @@ include::todo/src/main/resources/static/error/404.html[]
 ./mvnw spring-boot:run
 ----
 
-. Create a Docker image, test and push it to the registry.
+. [*OPTIONAL*] Create a Docker image, test and push it to the registry.
 +
 [source,shell]
 ----
@@ -177,6 +177,8 @@ docker push <your-id>>/todo:v1
 docker tag <image-id> <your-id>>/todo:latest
 docker push <your-id>>/todo:latest
 ----
++
+WARNING: This step is *OPTIONAL*, you *DON'T* need it for deploying in OpenShift.
 
 == Deploy the ToDo App in OpenShift
 
@@ -202,33 +204,68 @@ image::images/img08.png[]
 +
 image::images/img09.png[]
 +
-You can click the `Routes` link and change the port to `8081`.
+Add the `/todo` in the *Context Dir* in the *Advanced Git Options* section.
++
+image::images/img10.png[]
++
+Select `Java` icon in the *Builder* section and the `openjdk-8-ubi8` in the *Builder Image Version*.
++
+image::images/img11.png[]
++
+In the *General* section add the value `todo`.
++
+image::images/img12.png[]
++
+In the *Advanced Options* section click the `Routes` and create/add the port `8081`
++
+image::images/img13.png[]
 +
 TIP: Follow the Instructor for other field's metadata.
 
 . You will present the *Workload* page with your app in the middle. Review the options.
 +
-image::images/img10.png
+image::images/img14.png[]
 +
 You can click in the `View logs` link in the *Builds* section
 +
-image::images/img11.png[]
+image::images/img15.png[]
 +
-image::images/img12.png[]
+image::images/img16.png[]
 +
 You can also see the logs of the Pods runing.
 +
-image::images/img13.png[]
-. Switch to *_Administrator_* mode and fix the `Route` and `Service` if necessary to point to the 8081.
-+
-image::images/img14.png[]
-+
-image::images/img15.png[]
-. You can access to your `ToDo` app b y clicking into the `Route`
+image::images/img17.png[]
+
 
 == Deploy the ToDo UI App in OpenShift
 
+in this section we are going to use the `oc` or `kubectl` tools. It's necessary to hve both in your *PATH* environment variable.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+. Create the `k8s-deployment.yaml` file with the following commands
++
+[source,shell]
+----
+kubectl create deployment todo-ui --image=<your-id>/todo-ui:v1 --dry-run=client -o=yaml > k8s-deployment.yaml
+
+echo --- >> k8s-deployment.yaml
+
+kubectl create service loadbalancer todo-ui --tcp=8080:8080 --dry-run=client -o=yaml >> k8s-deployment.yaml
+----
 
 
 == Challenge
