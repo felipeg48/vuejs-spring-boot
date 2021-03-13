@@ -124,6 +124,7 @@ Add the following Dependencies: _Web_, _Data JPA_, _H2_, _Lombok_, _MySQL Driver
 +
 image::images/img01.png[]
 
+. Uncompress the ZIP and import it into your favorite IDE.
 . Add the following classes/interface:
 +
 [source,java]
