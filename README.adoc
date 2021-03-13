@@ -70,6 +70,8 @@ include::todo-ui/config/dev.env.js[]
 ----
 include::todo-ui/config/prod.env.js[]
 ----
++
+TIP: As recommendation, the service call should be internal and a different port, in this case it will be `http://todos:8081/todos`
 
 . Test you app with:
 +
@@ -242,10 +244,36 @@ image::images/img17.png[]
 . Open you OpenShift Cluster page.
 . Click the *+Add* button.
 . Select the *Dockerfile* square.
++
+image::images/img18.png[]
++
+Add the `/todo-ui` in the *Context Dir* in the *Advanced Git Options* section.
++
+image::images/img19.png[]
++
+Add `todo` in the *Application* and `todo-ui` in the *Name* fields in the *General* section.
++
+image::images/img20.png[]
++
+In the *Docker* section just make sure the *Dockerfile Path* is `Dockerfile` and the *Container Port* is `8080`.
++
+image::images/img21.png[]
++
+You should get the *Topology* Dashboard with the two apps.
++
+image::images/img22.png[]
++
+Take a look at the logs. If fails, you can alway re-do the `Build`
++
+image::images/img23.png[]
++
+Finally in the *Advaced Options* make sure the *Target Port* is set to `8080`
++
+image::images/img24.png[]
 
-
-
+. Make sure the App is working.
 
 == Challenge
 
 - If they apps are not running as it supose to, fix them!
+- The Spring Boot app is still using `H2` Database, how can we use `MySQL` what part of the code you need to change? What part of the Steps you need to re-do?

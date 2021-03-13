@@ -780,9 +780,21 @@ module.exports = merge(prodEnv, {
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>
 module.exports = {
   <span class="key">NODE_ENV</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;production&quot;</span><span class="delimiter">'</span></span>,
-  <span class="key">ROOT_API</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;http://todo/todos&quot;</span><span class="delimiter">'</span></span>
+  <span class="key">ROOT_API</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;http://todo:8081/todos&quot;</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+As recommendation, the service call should be internal and a different port, in this case it will be <code><a href="http://todos:8081/todos" class="bare">http://todos:8081/todos</a></code>
+</td>
+</tr>
+</table>
 </div>
 </li>
 <li>
@@ -806,15 +818,15 @@ COPY . .
 RUN npm run build
 
 # production stage
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-EXPOSE 80
+FROM bitnami/nginx as production-stage
+COPY --from=build-stage /app/dist /app
+EXPOSE 8080
 CMD [&quot;nginx&quot;, &quot;-g&quot;, &quot;daemon off;&quot;]</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>[<strong>OPTIONAL</strong>]Build you image, test it and push it to your Registry.</p>
+<p>[<strong>OPTIONAL</strong>] Build you image, test it and push it to your Registry.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="shell">docker build -t &lt;your-id&gt;&gt;/todo-ui:v1 .
@@ -1103,7 +1115,7 @@ spring.jpa.show-sql=true</code></pre>
 </div>
 </li>
 <li>
-<p>Create a Docker image, test and push it to the registry.</p>
+<p>[<strong>OPTIONAL</strong>] Create a Docker image, test and push it to the registry.</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="shell">./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=&lt;your-id&gt;/todo:v1
@@ -1112,6 +1124,18 @@ docker push &lt;your-id&gt;&gt;/todo:v1
 docker tag &lt;image-id&gt; &lt;your-id&gt;&gt;/todo:latest
 docker push &lt;your-id&gt;&gt;/todo:latest</code></pre>
 </div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+This step is <strong>OPTIONAL</strong>, you <strong>DON&#8217;T</strong> need it for deploying in OpenShift.
+</td>
+</tr>
+</table>
 </div>
 </li>
 </ol>
@@ -1176,7 +1200,36 @@ docker push &lt;your-id&gt;&gt;/todo:latest</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>You can click the <code>Routes</code> link and change the port to <code>8081</code>.</p>
+<p>Add the <code>/todo</code> in the <strong>Context Dir</strong> in the <strong>Advanced Git Options</strong> section.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/img10.png" alt="img10">
+</div>
+</div>
+<div class="paragraph">
+<p>Select <code>Java</code> icon in the <strong>Builder</strong> section and the <code>openjdk-8-ubi8</code> in the <strong>Builder Image Version</strong>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/img11.png" alt="img11">
+</div>
+</div>
+<div class="paragraph">
+<p>In the <strong>General</strong> section add the value <code>todo</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/img12.png" alt="img12">
+</div>
+</div>
+<div class="paragraph">
+<p>In the <strong>Advanced Options</strong> section click the <code>Routes</code> and create/add the port <code>8081</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/img13.png" alt="img13">
+</div>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -1193,20 +1246,22 @@ Follow the Instructor for other field&#8217;s metadata.
 </li>
 <li>
 <p>You will present the <strong>Workload</strong> page with your app in the middle. Review the options.</p>
-<div class="paragraph">
-<p>image::images/img10.png</p>
+<div class="imageblock">
+<div class="content">
+<img src="images/img14.png" alt="img14">
+</div>
 </div>
 <div class="paragraph">
 <p>You can click in the <code>View logs</code> link in the <strong>Builds</strong> section</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/img11.png" alt="img11">
+<img src="images/img15.png" alt="img15">
 </div>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/img12.png" alt="img12">
+<img src="images/img16.png" alt="img16">
 </div>
 </div>
 <div class="paragraph">
@@ -1214,25 +1269,9 @@ Follow the Instructor for other field&#8217;s metadata.
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="images/img13.png" alt="img13">
+<img src="images/img17.png" alt="img17">
 </div>
 </div>
-</li>
-<li>
-<p>Switch to <strong><em>Administrator</em></strong> mode and fix the <code>Route</code> and <code>Service</code> if necessary to point to the 8081.</p>
-<div class="imageblock">
-<div class="content">
-<img src="images/img14.png" alt="img14">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="images/img15.png" alt="img15">
-</div>
-</div>
-</li>
-<li>
-<p>You can access to your <code>ToDo</code> app b y clicking into the <code>Route</code></p>
 </li>
 </ol>
 </div>
@@ -1241,7 +1280,75 @@ Follow the Instructor for other field&#8217;s metadata.
 <div class="sect1">
 <h2 id="_deploy_the_todo_ui_app_in_openshift">Deploy the ToDo UI App in OpenShift</h2>
 <div class="sectionbody">
-
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open you OpenShift Cluster page.</p>
+</li>
+<li>
+<p>Click the <strong>+Add</strong> button.</p>
+</li>
+<li>
+<p>Select the <strong>Dockerfile</strong> square.</p>
+<div class="imageblock">
+<div class="content">
+<img src="images/img18.png" alt="img18">
+</div>
+</div>
+<div class="paragraph">
+<p>Add the <code>/todo-ui</code> in the <strong>Context Dir</strong> in the <strong>Advanced Git Options</strong> section.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/img19.png" alt="img19">
+</div>
+</div>
+<div class="paragraph">
+<p>Add <code>todo</code> in the <strong>Application</strong> and <code>todo-ui</code> in the <strong>Name</strong> fields in the <strong>General</strong> section.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/img20.png" alt="img20">
+</div>
+</div>
+<div class="paragraph">
+<p>In the <strong>Docker</strong> section just make sure the <strong>Dockerfile Path</strong> is <code>Dockerfile</code> and the <strong>Container Port</strong> is <code>8080</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/img21.png" alt="img21">
+</div>
+</div>
+<div class="paragraph">
+<p>You should get the <strong>Topology</strong> Dashboard with the two apps.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/img22.png" alt="img22">
+</div>
+</div>
+<div class="paragraph">
+<p>Take a look at the logs. If fails, you can alway re-do the <code>Build</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/img23.png" alt="img23">
+</div>
+</div>
+<div class="paragraph">
+<p>Finally in the <strong>Advaced Options</strong> make sure the <strong>Target Port</strong> is set to <code>8080</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/img24.png" alt="img24">
+</div>
+</div>
+</li>
+<li>
+<p>Make sure the App is working.</p>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1252,6 +1359,9 @@ Follow the Instructor for other field&#8217;s metadata.
 <li>
 <p>If they apps are not running as it supose to, fix them!</p>
 </li>
+<li>
+<p>The Spring Boot app is still using <code>H2</code> Database, how can we use <code>MySQL</code> what part of the code you need to change? What part of the Steps you need to re-do?</p>
+</li>
 </ul>
 </div>
 </div>
@@ -1259,7 +1369,7 @@ Follow the Instructor for other field&#8217;s metadata.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-03-12 18:21:42 -0500
+Last updated 2021-03-12 20:47:24 -0500
 </div>
 </div>
 </body>
