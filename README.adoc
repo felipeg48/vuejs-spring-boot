@@ -33,6 +33,24 @@ npm install axios
 include::todo-ui/index.html[]
 ----
 
+. Create the `event-bus.js` file with the following content:
++
+[source,javascript]
+.src/utils/event-bus.js
+----
+include::todo-ui/src/utils/event-bus.js[]
+----
+
+. Create the `todo.service.js` file with the following content:
++
+[source,javascript]
+.src/utils/todo.service.js
+----
+include::todo-ui/src/utils/todo.service.js[]
+----
++
+This script hass all the external calls with `Axios`.
+
 . Create the `ToDo.vue` file with the following content:
 +
 [source,html]
@@ -47,14 +65,6 @@ include::todo-ui/src/components/ToDo.vue[]
 .src/components/ToDo.vue
 ----
 include::todo-ui/src/components/ToDoList.vue[]
-----
-
-. Create the `event-bus.js` file with the following content:
-+
-[source,javascript]
-.src/utils/event-bus.js
-----
-include::todo-ui/src/utils/event-bus.js[]
 ----
 
 . Add the `ROOT_API` variable to the `dev.env.js` and `prod.env.js`.

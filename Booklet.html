@@ -610,6 +610,50 @@ npm install axios</code></pre>
 </div>
 </li>
 <li>
+<p>Create the <code>event-bus.js</code> file with the following content:</p>
+<div class="listingblock">
+<div class="title">src/utils/event-bus.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="reserved">import</span> Vue from <span class="string"><span class="delimiter">'</span><span class="content">vue</span><span class="delimiter">'</span></span>;
+<span class="reserved">export</span> const EventBus = <span class="keyword">new</span> Vue();</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create the <code>todo.service.js</code> file with the following content:</p>
+<div class="listingblock">
+<div class="title">src/utils/todo.service.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="reserved">import</span> Axios from <span class="string"><span class="delimiter">'</span><span class="content">axios</span><span class="delimiter">'</span></span>;
+
+Axios.defaults.baseURL = process.env.ROOT_API;
+
+const RESOURCE_NAME = <span class="string"><span class="delimiter">'</span><span class="content">/todos</span><span class="delimiter">'</span></span>;
+
+<span class="reserved">export</span> <span class="keyword">default</span> {
+  getAll() {
+    <span class="keyword">return</span> Axios.get(RESOURCE_NAME);
+  },
+  get(id) {
+    <span class="keyword">return</span> Axios.get(<span class="error">`</span><span class="predefined">$</span>{RESOURCE_NAME}/<span class="predefined">$</span>{id}<span class="error">`</span>);
+  },
+  create(data) {
+    <span class="keyword">return</span> Axios.post(RESOURCE_NAME, data);
+  },
+  update(id, data) {
+    <span class="keyword">return</span> Axios.put(<span class="error">`</span><span class="predefined">$</span>{RESOURCE_NAME}/<span class="predefined">$</span>{id}<span class="error">`</span>, data);
+  },
+  <span class="keyword">delete</span>(id) {
+    <span class="keyword">return</span> Axios.<span class="keyword">delete</span>(<span class="error">`</span><span class="predefined">$</span>{RESOURCE_NAME}/<span class="predefined">$</span>{id}<span class="error">`</span>);
+  }
+};</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This script hass all the external calls with <code>Axios</code>.</p>
+</div>
+</li>
+<li>
 <p>Create the <code>ToDo.vue</code> file with the following content:</p>
 <div class="listingblock">
 <div class="title">src/components/ToDo.vue</div>
@@ -694,9 +738,8 @@ npm install axios</code></pre>
 
 <span class="tag">&lt;script&gt;</span>
 <span class="inline">
-<span class="reserved">import</span> axios from <span class="string"><span class="delimiter">&quot;</span><span class="content">axios</span><span class="delimiter">&quot;</span></span>
-<span class="reserved">import</span> { EventBus } from <span class="string"><span class="delimiter">&quot;</span><span class="content">../utils/event-bus.js</span><span class="delimiter">&quot;</span></span>;
-
+<span class="reserved">import</span> { EventBus } from <span class="string"><span class="delimiter">&quot;</span><span class="content">../utils/event-bus</span><span class="delimiter">&quot;</span></span>;
+<span class="reserved">import</span> TodoService from <span class="string"><span class="delimiter">&quot;</span><span class="content">../utils/todo.service</span><span class="delimiter">&quot;</span></span>
 
 <span class="reserved">export</span> <span class="keyword">default</span> {
   <span class="key">name</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">ToDoList</span><span class="delimiter">&quot;</span></span>,
@@ -713,17 +756,17 @@ npm install axios</code></pre>
   },
   <span class="key">methods</span>: {
     <span class="function">getToDos</span>: <span class="keyword">function</span>() {
-        axios.get(process.env.ROOT_API)
+        TodoService.getAll()
           .then(response =&gt; <span class="local-variable">this</span>.todos = response.data);
     },
 
     <span class="function">newToDo</span>: <span class="keyword">function</span>(todo){
-      axios.post(process.env.ROOT_API, todo)
+      TodoService.create(todo)
           .then(response =&gt; <span class="local-variable">this</span>.todos.push(response.data));
     },
 
     <span class="function">doneToDo</span>: <span class="keyword">function</span>(id, event){
-       axios.<span class="keyword">delete</span>(process.env.ROOT_API + <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span> + id)
+       TodoService.<span class="keyword">delete</span>(id)
           .then(response =&gt; console.log(response.data));
       event.preventDefault();
       <span class="local-variable">this</span>.todos = <span class="local-variable">this</span>.remove(id);
@@ -734,7 +777,6 @@ npm install axios</code></pre>
             <span class="keyword">return</span> ele.id != value;
         });
     }
-
   }
 }</span>
 <span class="tag">&lt;/script&gt;</span>
@@ -750,16 +792,6 @@ npm install axios</code></pre>
 </div>
 </li>
 <li>
-<p>Create the <code>event-bus.js</code> file with the following content:</p>
-<div class="listingblock">
-<div class="title">src/utils/event-bus.js</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript"><span class="reserved">import</span> Vue from <span class="string"><span class="delimiter">'</span><span class="content">vue</span><span class="delimiter">'</span></span>;
-<span class="reserved">export</span> const EventBus = <span class="keyword">new</span> Vue();</code></pre>
-</div>
-</div>
-</li>
-<li>
 <p>Add the <code>ROOT_API</code> variable to the <code>dev.env.js</code> and <code>prod.env.js</code>.</p>
 <div class="listingblock">
 <div class="title">config/dev.env.js</div>
@@ -770,7 +802,7 @@ const prodEnv = require(<span class="string"><span class="delimiter">'</span><sp
 
 module.exports = merge(prodEnv, {
   <span class="key">NODE_ENV</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;development&quot;</span><span class="delimiter">'</span></span>,
-  <span class="key">ROOT_API</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;http://localhost:8081/todos&quot;</span><span class="delimiter">'</span></span>
+  <span class="key">ROOT_API</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;http://localhost:8081&quot;</span><span class="delimiter">'</span></span>
 })</code></pre>
 </div>
 </div>
@@ -780,7 +812,7 @@ module.exports = merge(prodEnv, {
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>
 module.exports = {
   <span class="key">NODE_ENV</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;production&quot;</span><span class="delimiter">'</span></span>,
-  <span class="key">ROOT_API</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;http://todo:8081/todos&quot;</span><span class="delimiter">'</span></span>
+  <span class="key">ROOT_API</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;http://todo:8081&quot;</span><span class="delimiter">'</span></span>
 }</code></pre>
 </div>
 </div>
@@ -1369,7 +1401,7 @@ Follow the Instructor for other field&#8217;s metadata.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-03-12 20:47:24 -0500
+Last updated 2021-03-12 21:55:45 -0500
 </div>
 </div>
 </body>

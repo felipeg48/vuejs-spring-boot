@@ -27,9 +27,8 @@
 
 <script>
 
-import axios from "axios"
-import { EventBus } from "../utils/event-bus.js";
-
+import { EventBus } from "../utils/event-bus";
+import TodoService from "../utils/todo.service"
 
 export default {
   name: "ToDoList",
@@ -46,17 +45,17 @@ export default {
   },
   methods: {
     getToDos: function() {
-        axios.get(process.env.ROOT_API)
+        TodoService.getAll()
           .then(response => this.todos = response.data);
     },
 
     newToDo: function(todo){
-      axios.post(process.env.ROOT_API, todo)
+      TodoService.create(todo)
           .then(response => this.todos.push(response.data));
     },
 
     doneToDo: function(id, event){
-       axios.delete(process.env.ROOT_API + "/" + id)
+       TodoService.delete(id)
           .then(response => console.log(response.data));
       event.preventDefault();
       this.todos = this.remove(id);
@@ -67,7 +66,6 @@ export default {
             return ele.id != value;
         });
     }
-
   }
 }
 </script>
