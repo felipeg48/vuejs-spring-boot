@@ -51,22 +51,6 @@ include::todo-ui/src/utils/todo.service.js[]
 +
 This script hass all the external calls with `Axios`.
 
-. Create the `ToDo.vue` file with the following content:
-+
-[source,html]
-.src/components/ToDo.vue
-----
-include::todo-ui/src/components/ToDo.vue[]
-----
-
-. Create the `ToDoList.vue` file with the following content:
-+
-[source,html]
-.src/components/ToDo.vue
-----
-include::todo-ui/src/components/ToDoList.vue[]
-----
-
 . Add the `ROOT_API` variable to the `dev.env.js` and `prod.env.js`.
 +
 [source,javascript]
@@ -82,6 +66,30 @@ include::todo-ui/config/prod.env.js[]
 ----
 +
 TIP: As recommendation, the service call should be internal and a different port, in this case it will be `http://todos:8081/todos`
+
+. Create the `ToDo.vue` file with the following content:
++
+[source,html]
+.src/components/ToDo.vue
+----
+include::todo-ui/src/components/ToDo.vue[]
+----
+
+. Create the `ToDoList.vue` file with the following content:
++
+[source,html]
+.src/components/ToDoList.vue
+----
+include::todo-ui/src/components/ToDoList.vue[]
+----
+
+. Replace the `App.vue` with the following content:
++
+[source,html]
+.src/App.vue
+----
+include::todo-ui/src/App.vue[]
+----
 
 . Test you app with:
 +

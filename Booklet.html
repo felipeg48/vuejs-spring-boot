@@ -654,6 +654,44 @@ const RESOURCE_NAME = <span class="string"><span class="delimiter">'</span><span
 </div>
 </li>
 <li>
+<p>Add the <code>ROOT_API</code> variable to the <code>dev.env.js</code> and <code>prod.env.js</code>.</p>
+<div class="listingblock">
+<div class="title">config/dev.env.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>
+const merge = require(<span class="string"><span class="delimiter">'</span><span class="content">webpack-merge</span><span class="delimiter">'</span></span>)
+const prodEnv = require(<span class="string"><span class="delimiter">'</span><span class="content">./prod.env</span><span class="delimiter">'</span></span>)
+
+module.exports = merge(prodEnv, {
+  <span class="key">NODE_ENV</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;development&quot;</span><span class="delimiter">'</span></span>,
+  <span class="key">ROOT_API</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;http://localhost:8081&quot;</span><span class="delimiter">'</span></span>
+})</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">config/dev.env.js</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>
+module.exports = {
+  <span class="key">NODE_ENV</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;production&quot;</span><span class="delimiter">'</span></span>,
+  <span class="key">ROOT_API</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;http://todo:8081&quot;</span><span class="delimiter">'</span></span>
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+As recommendation, the service call should be internal and a different port, in this case it will be <code><a href="http://todos:8081/todos" class="bare">http://todos:8081/todos</a></code>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
 <p>Create the <code>ToDo.vue</code> file with the following content:</p>
 <div class="listingblock">
 <div class="title">src/components/ToDo.vue</div>
@@ -707,7 +745,7 @@ const RESOURCE_NAME = <span class="string"><span class="delimiter">'</span><span
 <li>
 <p>Create the <code>ToDoList.vue</code> file with the following content:</p>
 <div class="listingblock">
-<div class="title">src/components/ToDo.vue</div>
+<div class="title">src/components/ToDoList.vue</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="html"><span class="tag">&lt;template&gt;</span>
   <span class="tag">&lt;div</span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">row todo-list</span><span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
@@ -792,41 +830,34 @@ const RESOURCE_NAME = <span class="string"><span class="delimiter">'</span><span
 </div>
 </li>
 <li>
-<p>Add the <code>ROOT_API</code> variable to the <code>dev.env.js</code> and <code>prod.env.js</code>.</p>
+<p>Replace the <code>App.vue</code> with the following content:</p>
 <div class="listingblock">
-<div class="title">config/dev.env.js</div>
+<div class="title">src/App.vue</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript"><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>
-const merge = require(<span class="string"><span class="delimiter">'</span><span class="content">webpack-merge</span><span class="delimiter">'</span></span>)
-const prodEnv = require(<span class="string"><span class="delimiter">'</span><span class="content">./prod.env</span><span class="delimiter">'</span></span>)
+<pre class="CodeRay highlight"><code data-lang="html"><span class="tag">&lt;template&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">app</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">class</span>=<span class="string"><span class="delimiter">&quot;</span><span class="content">container</span><span class="delimiter">&quot;</span></span> <span class="attribute-name">style</span>=<span class="string"><span class="delimiter">&quot;</span><span class="key">margin-top</span>: <span class="float">30px</span>;<span class="delimiter">&quot;</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;to-do</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;to-do-list</span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/template&gt;</span>
 
-module.exports = merge(prodEnv, {
-  <span class="key">NODE_ENV</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;development&quot;</span><span class="delimiter">'</span></span>,
-  <span class="key">ROOT_API</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;http://localhost:8081&quot;</span><span class="delimiter">'</span></span>
-})</code></pre>
+<span class="tag">&lt;script&gt;</span>
+<span class="inline"><span class="reserved">import</span> ToDo from <span class="string"><span class="delimiter">'</span><span class="content">./components/ToDo</span><span class="delimiter">'</span></span>
+<span class="reserved">import</span> ToDoList from <span class="string"><span class="delimiter">'</span><span class="content">./components/ToDoList.vue</span><span class="delimiter">'</span></span>
+
+<span class="reserved">export</span> <span class="keyword">default</span> {
+  <span class="key">name</span>: <span class="string"><span class="delimiter">'</span><span class="content">App</span><span class="delimiter">'</span></span>,
+  <span class="key">components</span>: {
+    ToDo,ToDoList
+  }
+}</span>
+
+<span class="tag">&lt;/script&gt;</span>
+
+<span class="tag">&lt;style&gt;</span>
+
+<span class="tag">&lt;/style&gt;</span></code></pre>
 </div>
-</div>
-<div class="listingblock">
-<div class="title">config/dev.env.js</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript"><span class="string"><span class="delimiter">'</span><span class="content">use strict</span><span class="delimiter">'</span></span>
-module.exports = {
-  <span class="key">NODE_ENV</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;production&quot;</span><span class="delimiter">'</span></span>,
-  <span class="key">ROOT_API</span>: <span class="string"><span class="delimiter">'</span><span class="content">&quot;http://todo:8081&quot;</span><span class="delimiter">'</span></span>
-}</code></pre>
-</div>
-</div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-As recommendation, the service call should be internal and a different port, in this case it will be <code><a href="http://todos:8081/todos" class="bare">http://todos:8081/todos</a></code>
-</td>
-</tr>
-</table>
 </div>
 </li>
 <li>
@@ -969,15 +1000,11 @@ This step is <strong>OPTIONAL</strong>, you <strong>DON&#8217;T</strong> need it
 <pre class="CodeRay highlight"><code data-lang="java"><span class="keyword">package</span> <span class="namespace">com.example.todo</span>;
 
 <span class="keyword">import</span> <span class="include">lombok.RequiredArgsConstructor</span>;
-<span class="keyword">import</span> <span class="include">org.springframework.web.HttpRequestMethodNotSupportedException</span>;
 <span class="keyword">import</span> <span class="include">org.springframework.web.bind.annotation</span>.*;
-<span class="keyword">import</span> <span class="include">org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver</span>;
 
 <span class="keyword">import</span> <span class="include">javax.servlet.http.HttpServletRequest</span>;
 <span class="keyword">import</span> <span class="include">java.util.HashMap</span>;
 <span class="keyword">import</span> <span class="include">java.util.Map</span>;
-<span class="keyword">import</span> <span class="include">java.util.stream.Collectors</span>;
-<span class="keyword">import</span> <span class="include">java.util.stream.StreamSupport</span>;
 
 <span class="annotation">@CrossOrigin</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">*</span><span class="delimiter">&quot;</span></span>)
 <span class="annotation">@RequiredArgsConstructor</span>
@@ -1401,7 +1428,7 @@ Follow the Instructor for other field&#8217;s metadata.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-03-12 21:55:45 -0500
+Last updated 2021-03-13 11:19:24 -0500
 </div>
 </div>
 </body>
