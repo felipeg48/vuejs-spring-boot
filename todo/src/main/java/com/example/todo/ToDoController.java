@@ -1,15 +1,11 @@
 package com.example.todo;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @CrossOrigin("*")
 @RequiredArgsConstructor
